@@ -28,6 +28,9 @@ public class PlatformerPlayerController : MonoBehaviour
     public AudioClip scoreSound;
     private AudioSource playerAudio;
 
+    //animation
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,8 @@ public class PlatformerPlayerController : MonoBehaviour
 
         //set reference to sudio source comp
         playerAudio = GetComponent<AudioSource>();
+
+        animator = GetComponent<Animator>();
 
         //check ground check is assigned
         if (GroundCheck == null)
@@ -62,8 +67,13 @@ public class PlatformerPlayerController : MonoBehaviour
         //move player using rigid body
         rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
 
+        animator.SetFloat("xVelocityAbs", Mathf.Abs(rb.velocity.x)); //set animation parameter for horizontal movement
+        animator.SetFloat("yVelocity", rb.velocity.y); //set animation parameter for vertical movement
+
         //check if player is grounded
         isGrounded = Physics2D.OverlapCircle(GroundCheck.position, groundCheckRadius, groundLayer);
+
+        animator.SetBool("onGround", isGrounded); //set animation parameter for grounded state
 
         //add animation here 
 
